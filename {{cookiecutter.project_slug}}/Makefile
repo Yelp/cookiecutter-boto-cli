@@ -1,7 +1,7 @@
 PEX := pex
 VIRTUALENV := python3 -m venv
 PIP := venv/bin/pip
-SCRIPT := {{ cookiecutter.script-name }}
+SCRIPT := {{ cookiecutter.script_name }}
 
 all: bin/$(SCRIPT)
 

@@ -5,6 +5,8 @@ import argparse
 import logging
 import sys
 
+from .logging import init_logging
+from .logging import set_root_log_level
 from .session import init_session
 
 module = sys.modules['__main__'].__file__
@@ -26,16 +28,6 @@ def parse_args():
         help='Increases log verbosity (can be specified multiple times).')
     return parser.parse_args()
 
-def verbosity_to_log_level(verbosity, default=logging.WARN):
-    # Log levels go by 10's, with DEBUG=10 and CRITICAL=50
-    # See https://docs.python.org/3/howto/logging.html#logging-levels
-    return max(default - (verbosity * 10), 0)
-
-def set_root_log_level(verbosity, default=logging.WARN):
-    root_logger = logging.getLogger()
-    log_level = verbosity_to_log_level(verbosity)
-    root_logger.setLevel(log_level)
-
 def core():
     args = parse_args()
     set_root_log_level(args.verbosity)
@@ -50,10 +42,7 @@ def core():
     ### END EXAMPLE CODE ###
 
 def main():
-    logging.basicConfig(
-        stream=sys.stderr,
-        format='%(levelname)s: %(message)s',
-        level=logging.DEBUG)
+    init_logging()
     try:
         return core()
     except KeyboardInterrupt:
